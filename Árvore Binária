@@ -1,0 +1,73 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <locale.h>
+
+typedef struct node{int data; struct node* sad; struct node* sae;}Tree;
+
+Tree* createTree(){return NULL;}
+
+bool Empty(Tree* t){return t == NULL?true:false;}
+
+void displayTree(Tree* t){
+  printf("<");
+  if(!Empty(t)){
+    printf(" %d ", t->data);
+    displayTree(t->sae);
+    displayTree(t->sad);
+  }
+  printf(">");
+}
+
+void addTree(Tree** t, int value){
+  if(Empty(*t)){
+    *t = (Tree*)malloc(sizeof(Tree));
+    (*t)->sae = NULL;
+    (*t)->sad = NULL;
+    (*t)->data = value;
+  }else{
+    if(value < (*t)->data) addTree(&(*t)->sae, value);
+    if(value > (*t)->data) addTree(&(*t)->sad, value);
+  }
+}
+
+int FindTree(Tree* t, int value) {
+  if(Empty(t)) return 0;
+  return t->data==value || FindTree(t->sae, value) || FindTree(t->sad, value);
+}
+
+void menu(){
+  Tree* t = createTree();
+  int op,value;
+  while(op!=0){
+    printf("\n\n\t\tÁrvore Binária\t\n\n[1] Adicionar\n[2] Exibir\n[3] Buscar\n[0] Sair\n\t\t>>>");
+    scanf("%d",&op);
+    switch(op){
+      case 1:
+        printf("\nValor: ");
+        scanf("%d",&value);
+        addTree(&t,value);
+      break;
+      case 2:
+        displayTree(t);
+      break;
+      case 3:
+        printf("\nValor: ");
+        scanf("%d",&value);
+        if(FindTree(t,value)) printf("\n%d encontrado!\n",value);
+        else printf("\nValor não encontrado!\n");
+      break;
+      case 0:
+        printf("\nAté Logo!\n");
+      break;
+      default:
+        printf("\nTente Novamnete...\n");
+    }
+  }
+  free(t);
+}
+int main(){
+  setlocale(LC_ALL,"portuguese");
+  menu();
+  return 0;
+}
